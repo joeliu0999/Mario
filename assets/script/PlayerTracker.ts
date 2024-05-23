@@ -10,19 +10,22 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class NewClass extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    @property(cc.Node)
+    character: cc.Node = null;
 
-    @property
-    text: string = 'hello';
+    private diff:number = 0;
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
+    onLoad () {
+        this.diff = this.node.x-this.character.x;
+    }
 
     start () {
 
     }
 
-    // update (dt) {}
+    update (dt) {
+        this.node.x = this.character.x+this.diff;
+    }
 }

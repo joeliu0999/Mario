@@ -13,22 +13,20 @@ export default class Player extends cc.Component {
     @property(cc.Label)
     label: cc.Label = null;
 
-    @property
-    text: string = 'hello';
-
-    private playerSpeed: number = null;
     private Up: boolean = false;
     private Left: boolean = false;
     private Right: boolean = false;
     private isDead: boolean = false;
     private onGround: boolean = false;
-    
+    private rigidBody: cc.RigidBody = null;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP,this.onKeyUp,this);
+        this.rigidBody = this.getComponent(cc.RigidBody);
     }
 
     start () {
@@ -40,12 +38,12 @@ export default class Player extends cc.Component {
     }
 
     onBeginContact(contact, self, other){
-        console.log(self.node.name);
-        console.log(other.node.name);
-
         if(other.node.name === "ground"){
             this.onGround = true;
-            console.log("detected");
+        }
+
+        if(other.node.name === "void" || other.tag === 5){
+            this.isDead = true;
         }
 
     }
@@ -53,7 +51,6 @@ export default class Player extends cc.Component {
     private onKeyDown(event){
         if(event.keyCode==cc.macro.KEY.w){
             this.Up = true;
-            console.log("up");
         }
         else if (event.keyCode ==cc.macro.KEY.a){
             this.Left = true;
@@ -66,33 +63,42 @@ export default class Player extends cc.Component {
     private onKeyUp(event){
         if(event.keyCode==cc.macro.KEY.w){
             this.Up = false;
-            console.log("undone up");
         }
         else if (event.keyCode ==cc.macro.KEY.a){
             this.Left = false;
-            this.playerSpeed = 0;
         }
         else if (event.keyCode == cc.macro.KEY.d){
             this.Right = false;
-            this.playerSpeed = 0;
         }
     }
 
     private playerMovement(dt){
+        let velocity = this.rigidBody.linearVelocity;
+
+        if(this.isDead){
+            this.node.position=cc.v3(200,200,0);
+            this.isDead = false;
+        }
+        
         if(this.Up && this.onGround){
             this.onGround = false;
-            this.getComponent(cc.RigidBody).linearVelocity = cc.v2(0,200); //jump
+            velocity.y = 200 //jump
         }
-        else if(this.Left){
-            this.playerSpeed = -200;
-            this.node.scaleX = -2;
+        if(this.Left){
+            velocity.x = -100;
+            this.node.scaleX = -1;
         }
         else if(this.Right){
-            this.playerSpeed = 200;
-            this.node.scaleX = 2;
+            velocity.x = 100;
+            this.node.scaleX = 1;
+        }
+        else{
+            velocity.x = 0;
         }
 
-        this.node.x += this.playerSpeed*dt;
+        this.rigidBody.linearVelocity = velocity;
+        //can't use node.x bc by pass physics manager
+        //can't directly set linearVelocity.x or y becuase it is a getter
     }
 
 }

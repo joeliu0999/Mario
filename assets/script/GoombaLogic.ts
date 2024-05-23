@@ -10,8 +10,8 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class NewClass extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    @property(cc.Node)
+    mario: cc.Node = null;
 
     @property
     text: string = 'hello';
@@ -20,11 +20,25 @@ export default class NewClass extends cc.Component {
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
+        
     }
 
     start () {
-
+        this.node.runAction(this.movement());
     }
 
-    // update (dt) {}
+    update (dt) {
+    }
+
+    onBeginContact(contact, self, other){
+        if(self.tag === 6){
+            this.node.destroy();
+        }
+    }
+
+    movement(){
+        let action = cc.sequence(cc.moveBy(2,100,0),cc.moveBy(2,-100,0))
+        return cc.repeatForever(action);
+    }
+    
 }
