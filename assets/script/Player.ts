@@ -20,6 +20,8 @@ export default class Player extends cc.Component {
     private onGround: boolean = false;
     private rigidBody: cc.RigidBody = null;
 
+    private animation: cc.Animation =null;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
@@ -27,10 +29,11 @@ export default class Player extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN,this.onKeyDown,this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP,this.onKeyUp,this);
         this.rigidBody = this.getComponent(cc.RigidBody);
+        this.animation = this.getComponent(cc.Animation);
     }
 
     start () {
- 
+        
     }
 
     update (dt) {
@@ -38,11 +41,12 @@ export default class Player extends cc.Component {
     }
 
     onBeginContact(contact, self, other){
-        if(other.node.name === "ground"){
+        console.log(other.node.tag);
+        if(other.node.name === "ground" || other.node.name === "sTube" || other.node.name === "tube" || other.node.name === "brick"){
             this.onGround = true;
         }
 
-        if(other.node.name === "void" || other.tag === 5){
+        if(other.node.name === "void" || other.tag === 5 || other.tag === 7){
             this.isDead = true;
         }
 
@@ -76,24 +80,34 @@ export default class Player extends cc.Component {
         let velocity = this.rigidBody.linearVelocity;
 
         if(this.isDead){
-            this.node.position=cc.v3(200,200,0);
+            this.node.position=cc.v3(-400,50,0);
             this.isDead = false;
         }
         
         if(this.Up && this.onGround){
             this.onGround = false;
-            velocity.y = 200 //jump
+            velocity.y = 150 //jump
+            if (!this.animation.getAnimationState("jump").isPlaying) {
+                this.animation.play("jump");
+            }
         }
         if(this.Left){
             velocity.x = -100;
             this.node.scaleX = -1;
+            if (!this.animation.getAnimationState("run").isPlaying) {
+                this.animation.play("run");
+            }
         }
         else if(this.Right){
             velocity.x = 100;
             this.node.scaleX = 1;
+            if (!this.animation.getAnimationState("run").isPlaying) {
+                this.animation.play("run");
+            }
         }
         else{
             velocity.x = 0;
+            this.animation.stop();
         }
 
         this.rigidBody.linearVelocity = velocity;

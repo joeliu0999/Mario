@@ -13,6 +13,9 @@ export default class NewClass extends cc.Component {
     @property(cc.Node)
     mario: cc.Node = null;
 
+    @property
+    text: string = 'hello';
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
@@ -28,15 +31,12 @@ export default class NewClass extends cc.Component {
     }
 
     onBeginContact(contact, self, other){
-        console.log(self.node.name);
-
-        if(self.tag === 6){
+        if(self.tag === 8){
             this.node.destroy();
         
         }
-        if(self.tag === 5){
-            //hit mario mario dies
-            console.log("this is not right");
+        if(self.tag === 7){
+            //hit mario, mario dies
         }
     }
 
