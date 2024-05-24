@@ -1,11 +1,11 @@
 {
   "__type__": "cc.AnimationClip",
-  "_name": "jump",
+  "_name": "GoombaDead",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 0.08333333333333333,
+  "_duration": 0.05,
   "sample": 60,
-  "speed": 1,
+  "speed": 0.3,
   "wrapMode": 1,
   "curveData": {
     "comps": {
@@ -14,19 +14,13 @@
           {
             "frame": 0,
             "value": {
-              "__uuid__": "3a2c0b23-98c1-4ec3-85d6-2f8ce696560e"
+              "__uuid__": "b26467cf-3a15-4dbf-8f9b-33005eff2753"
             }
           },
           {
             "frame": 0.03333333333333333,
             "value": {
-              "__uuid__": "4bf25086-e798-45b8-b66b-0f5984021dfa"
-            }
-          },
-          {
-            "frame": 0.06666666666666667,
-            "value": {
-              "__uuid__": "bc80468d-f3f9-454f-a291-12a504dae5b8"
+              "__uuid__": "200d2633-6f24-426d-83b8-75f822e04cc1"
             }
           }
         ]

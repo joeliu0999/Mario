@@ -13,10 +13,13 @@ export default class NewClass extends cc.Component {
     @property(cc.Node)
     mario: cc.Node = null;
 
+    private animation: cc.Animation = null;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
+        this.animation=this.getComponent(cc.Animation);
         
     }
 
@@ -28,15 +31,13 @@ export default class NewClass extends cc.Component {
     }
 
     onBeginContact(contact, self, other){
-        console.log(self.node.name);
-
         if(self.tag === 6){
-            this.node.destroy();
+            this.animation.play("GoombaDead");
+            this.animation.on('finished',()=>this.node.destroy(),this);
         
         }
         if(self.tag === 5){
             //hit mario mario dies
-            console.log("this is not right");
         }
     }
 

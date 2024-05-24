@@ -38,6 +38,7 @@ export default class Player extends cc.Component {
 
     update (dt) {
         this.playerMovement(dt);
+        //this.playAnimation();
     }
 
     onBeginContact(contact, self, other){
@@ -83,36 +84,60 @@ export default class Player extends cc.Component {
             this.node.position=cc.v3(-400,50,0);
             this.isDead = false;
         }
-        
         if(this.Up && this.onGround){
             this.onGround = false;
             velocity.y = 150 //jump
-            if (!this.animation.getAnimationState("jump").isPlaying) {
-                this.animation.play("jump");
-            }
+            this.animation.play("jump");
         }
+
         if(this.Left){
             velocity.x = -100;
             this.node.scaleX = -1;
-            if (!this.animation.getAnimationState("run").isPlaying) {
+            //always run the jump animation if not on the gournd
+            if (!this.animation.getAnimationState("run").isPlaying && this.onGround) {
                 this.animation.play("run");
             }
         }
         else if(this.Right){
             velocity.x = 100;
             this.node.scaleX = 1;
-            if (!this.animation.getAnimationState("run").isPlaying) {
+            if (!this.animation.getAnimationState("run").isPlaying && this.onGround) {
                 this.animation.play("run");
             }
         }
         else{
             velocity.x = 0;
-            this.animation.stop();
+            //prevent from immediately stopping the jump motion when neither left nor right is pressed 
+            if (!this.animation.getAnimationState("jump").isPlaying) {
+                if(this.onGround){
+                    this.animation.play("idle");
+                }
+                //this.animation.stop();
+            }
         }
 
         this.rigidBody.linearVelocity = velocity;
         //can't use node.x bc by pass physics manager
         //can't directly set linearVelocity.x or y becuase it is a getter
+    }
+
+    private playAnimation(){
+        if(this.Up){
+            if (!this.animation.getAnimationState("run").isPlaying) {
+                this.animation.play("run");
+                console.log("test");
+            }
+        }
+        if(this.Left){
+            if (!this.animation.getAnimationState("run").isPlaying) {
+                this.animation.play("run");
+            }
+        }
+        else if(this.Right){
+            if (!this.animation.getAnimationState("run").isPlaying) {
+                this.animation.play("run");
+            }
+        }
     }
 
 }
