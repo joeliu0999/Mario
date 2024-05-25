@@ -125,7 +125,6 @@ export default class Player extends cc.Component {
         if(this.Up){
             if (!this.animation.getAnimationState("run").isPlaying) {
                 this.animation.play("run");
-                console.log("test");
             }
         }
         if(this.Left){
