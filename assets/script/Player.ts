@@ -10,8 +10,8 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class Player extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
+    @property(cc.Node)
+    mushroom: cc.Node = null;
 
     private Up: boolean = false;
     private Left: boolean = false;
@@ -21,6 +21,7 @@ export default class Player extends cc.Component {
     private rigidBody: cc.RigidBody = null;
 
     private animation: cc.Animation =null;
+    private isBig =false;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -38,7 +39,6 @@ export default class Player extends cc.Component {
 
     update (dt) {
         this.playerMovement(dt);
-        //this.playAnimation();
     }
 
     onBeginContact(contact, self, other){
@@ -49,6 +49,10 @@ export default class Player extends cc.Component {
 
         if(other.node.name === "void" || other.tag === 5 || other.tag === 7){
             this.isDead = true;
+        }
+        if(other.node.name === "mushroom"){
+            this.mushroom.destroy();
+            
         }
 
     }
@@ -120,23 +124,4 @@ export default class Player extends cc.Component {
         //can't use node.x bc by pass physics manager
         //can't directly set linearVelocity.x or y becuase it is a getter
     }
-
-    private playAnimation(){
-        if(this.Up){
-            if (!this.animation.getAnimationState("run").isPlaying) {
-                this.animation.play("run");
-            }
-        }
-        if(this.Left){
-            if (!this.animation.getAnimationState("run").isPlaying) {
-                this.animation.play("run");
-            }
-        }
-        else if(this.Right){
-            if (!this.animation.getAnimationState("run").isPlaying) {
-                this.animation.play("run");
-            }
-        }
-    }
-
 }

@@ -96,10 +96,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 161
+        "__id__": 162
       },
       {
-        "__id__": 162
+        "__id__": 163
       }
     ],
     "_prefab": null,
@@ -4512,13 +4512,13 @@
         "__id__": 151
       },
       {
-        "__id__": 153
+        "__id__": 154
       }
     ],
     "_active": true,
     "_components": [
       {
-        "__id__": 160
+        "__id__": 161
       }
     ],
     "_prefab": null,
@@ -5613,6 +5613,9 @@
     "_components": [
       {
         "__id__": 152
+      },
+      {
+        "__id__": 153
       }
     ],
     "_prefab": null,
@@ -5698,6 +5701,18 @@
     "_id": "b59Vlc0jBP+YPD3p7fDUh4"
   },
   {
+    "__type__": "1725e9t+idKFIf669HG2sQw",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 151
+    },
+    "_enabled": true,
+    "label": null,
+    "text": "hello",
+    "_id": "26P7FIxYZFXJZnEZEvbJ28"
+  },
+  {
     "__type__": "cc.Node",
     "_name": "question",
     "_objFlags": 0,
@@ -5707,9 +5722,6 @@
     "_children": [],
     "_active": true,
     "_components": [
-      {
-        "__id__": 154
-      },
       {
         "__id__": 155
       },
@@ -5724,6 +5736,9 @@
       },
       {
         "__id__": 159
+      },
+      {
+        "__id__": 160
       }
     ],
     "_prefab": null,
@@ -5779,7 +5794,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 153
+      "__id__": 154
     },
     "_enabled": true,
     "_materials": [
@@ -5813,7 +5828,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 153
+      "__id__": 154
     },
     "_enabled": true,
     "_type": 0,
@@ -5838,7 +5853,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 153
+      "__id__": 154
     },
     "_enabled": true,
     "tag": 50,
@@ -5864,7 +5879,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 153
+      "__id__": 154
     },
     "_enabled": true,
     "tag": 51,
@@ -5890,7 +5905,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 153
+      "__id__": 154
     },
     "_enabled": true,
     "_defaultClip": {
@@ -5912,7 +5927,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 153
+      "__id__": 154
     },
     "_enabled": true,
     "mushroom": {
