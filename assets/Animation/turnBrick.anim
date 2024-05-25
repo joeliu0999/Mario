@@ -1,0 +1,31 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "turnBrick",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.06666666666666667,
+  "sample": 60,
+  "speed": 0.5,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "192aae62-4259-485e-afd1-09c2e85c59c8"
+            }
+          },
+          {
+            "frame": 0.05,
+            "value": {
+              "__uuid__": "176b82a8-9835-40fc-ad39-764ba7955113"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

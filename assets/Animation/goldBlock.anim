@@ -1,0 +1,55 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "goldBlock",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.26666666666666666,
+  "sample": 60,
+  "speed": 0.3,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "192aae62-4259-485e-afd1-09c2e85c59c8"
+            }
+          },
+          {
+            "frame": 0.03333333333333333,
+            "value": {
+              "__uuid__": "27b1ce71-a6bc-45c0-8ebf-27eae058d527"
+            }
+          },
+          {
+            "frame": 0.06666666666666667,
+            "value": {
+              "__uuid__": "f25ab2c9-fdc4-47f9-b32f-32b1b186981a"
+            }
+          },
+          {
+            "frame": 0.1,
+            "value": {
+              "__uuid__": "e8672e94-3285-437b-9480-96ba25faaa84"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "192aae62-4259-485e-afd1-09c2e85c59c8"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "192aae62-4259-485e-afd1-09c2e85c59c8"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
