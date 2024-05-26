@@ -15,6 +15,7 @@ export default class NewClass extends cc.Component {
 
     private coinAnimation: cc.Animation = null;
     private goldBlockAnimation: cc.Animation = null;
+    private audioSource: cc.AudioSource = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -22,6 +23,7 @@ export default class NewClass extends cc.Component {
         this.coinAnimation = this.coin.getComponent(cc.Animation);
         this.goldBlockAnimation = this.node.getComponent(cc.Animation);
         this.coin.runAction(cc.hide()); //only show when brick is hit
+        this.audioSource = this.coin.getComponent(cc.AudioSource);
     }
 
     start () {
@@ -37,6 +39,7 @@ export default class NewClass extends cc.Component {
             this.coin.runAction(this.coinMovement());
             this.goldBlockAnimation.stop("goldBlock");
             this.goldBlockAnimation.play("turnBrick");
+            this.audioSource.play();
             this.removeCollider();
         }
 

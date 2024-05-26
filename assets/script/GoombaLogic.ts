@@ -14,12 +14,14 @@ export default class NewClass extends cc.Component {
     mario: cc.Node = null;
 
     private animation: cc.Animation = null;
+    private stompAudio : cc.AudioSource = null;
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
         this.animation=this.getComponent(cc.Animation);
+        this.stompAudio=this.getComponent(cc.AudioSource);
         
     }
 
@@ -34,10 +36,7 @@ export default class NewClass extends cc.Component {
         if(self.tag === 6){
             this.animation.play("GoombaDead");
             this.animation.on('finished',()=>this.node.destroy(),this);
-        
-        }
-        if(self.tag === 5){
-            //hit mario mario dies
+            this.stompAudio.play();
         }
     }
 

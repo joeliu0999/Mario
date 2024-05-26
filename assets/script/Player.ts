@@ -20,9 +20,20 @@ export default class Player extends cc.Component {
     private onGround: boolean = false;
     private rigidBody: cc.RigidBody = null;
 
+    private jumpAudio: cc.AudioSource = null;
+    private deathAudio: cc.AudioSource = null;
+    private poswerDownAudio: cc.AudioSource = null;
+    
+    
+
     private animation: cc.Animation =null;
     private isBig: boolean =false;
     private turnBig: boolean = false;
+    private turnSmall: boolean =false;
+    private hitWall: boolean = false;
+    private rebornTime: number = 3;
+    private life: number = 3;
+    
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -32,6 +43,11 @@ export default class Player extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP,this.onKeyUp,this);
         this.rigidBody = this.getComponent(cc.RigidBody);
         this.animation = this.getComponent(cc.Animation);
+        let audio = this.getComponents(cc.AudioSource);
+        this.jumpAudio = audio[0];
+        this.deathAudio = audio [1];
+        this.poswerDownAudio = audio [2];
+        //this.turnBig=true;
     }
 
     start () {
@@ -40,21 +56,42 @@ export default class Player extends cc.Component {
 
     update (dt) {
         this.playerMovement(dt);
-        this.checkSize();
+        this.checkSizeBig();
+        this.checkSizeSmall();
     }
 
     onBeginContact(contact, self, other){
-        console.log(other.node.tag);
+        this.hitWall = true;
+        if(this.onGround){
+            this.hitWall = false;
+        }
         if(other.node.name === "ground" || other.node.name === "sTube" || other.node.name === "tube" || other.node.name === "brick"){
+            
+            if(self.tag === 1){
+                this.onGround = true;
+            }
+        }
+        if(other.node.name === "ivy"){
             this.onGround = true;
         }
 
         if(other.node.name === "void" || other.tag === 5 || other.tag === 7){
-            this.isDead = true;
+            if(this.isBig){
+                this.reborn();
+                this.scheduleOnce(()=>{this.turnSmall = true},this.rebornTime);
+                this.poswerDownAudio.play();
+            }
+            else{
+                this.isDead = true;
+            }
+            
         }
         if(other.node.name === "mushroom"){
             this.mushroom.destroy();
             this.turnBig = true;
+        }
+        if(other.node.name === "flag"){
+            cc.director.loadScene("youWin");
         }
 
     }
@@ -87,8 +124,14 @@ export default class Player extends cc.Component {
         let velocity = this.rigidBody.linearVelocity;
 
         if(this.isDead){
+            this.life-=1;
+            if(this.life==0){
+                cc.director.loadScene("GameOver");
+            }
+
             this.node.position=cc.v3(-400,50,0);
             this.isDead = false;
+            this.deathAudio.play();
         }
         if(this.Up && this.onGround){
             this.onGround = false;
@@ -99,6 +142,7 @@ export default class Player extends cc.Component {
             else{
                 this.animation.play("bigJump");
             }
+            this.jumpAudio.play();
 
         }
 
@@ -149,12 +193,52 @@ export default class Player extends cc.Component {
         //can't directly set linearVelocity.x or y becuase it is a getter
     }
 
-    private checkSize(){
+    private CheckChangeSize(){
+        
+    }
+
+    private checkSizeBig(){
         if(this.turnBig === true){
-            let physicsBoxCollider = this.getComponent(cc.PhysicsBoxCollider);
-            physicsBoxCollider.size = new cc.Size(16,27);
-            physicsBoxCollider.apply();
+            console.log("test");
+            let physicsBoxCollider = this.node.getComponents(cc.PhysicsBoxCollider);
+            for(let i=0;i<physicsBoxCollider.length;i++){
+                if(physicsBoxCollider[i].tag === 10){
+                    physicsBoxCollider[i].size = new cc.Size(16,27);
+                    physicsBoxCollider[i].apply();
+                }
+                else{
+                    physicsBoxCollider[i].tag = 1;
+                    physicsBoxCollider[i].size = new cc.Size(16,21);
+                    physicsBoxCollider[i].offset = cc.v2(0,-3);
+                    physicsBoxCollider[i].apply();
+                }
+            }
             this.isBig=true;
+            this.turnBig =false;
         }
+    }
+    private checkSizeSmall(){
+        if(this.turnSmall === true){
+            let physicsBoxCollider = this.node.getComponents(cc.PhysicsBoxCollider);
+            for(let i=0;i<physicsBoxCollider.length;i++){
+                if(physicsBoxCollider[i].tag === 10){
+                    physicsBoxCollider[i].size = new cc.Size(16,16);
+                    physicsBoxCollider[i].apply();
+                }
+                else{
+                    physicsBoxCollider[i].tag = 1;
+                    physicsBoxCollider[i].size = new cc.Size(1,10);
+                    physicsBoxCollider[i].offset = cc.v2(0,-3);
+                    physicsBoxCollider[i].apply();
+                }
+            }
+            this.isBig=false;
+            this.turnSmall = false;
+        }
+    }
+
+    private reborn(){
+        let sequence = cc.sequence (cc.hide(),cc.delayTime(0.1),cc.show())
+            this.schedule(()=>{this.node.runAction(sequence)},0.2,10);
     }
 }

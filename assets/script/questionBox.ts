@@ -15,12 +15,14 @@ export default class NewClass extends cc.Component {
 
     private questionBoxAnimation: cc.Animation;
     private isSpawned: boolean;
+    private mushroomSound: cc.AudioSource;
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true;
         this.questionBoxAnimation = this.node.getComponent(cc.Animation);
+        this.mushroomSound = this.getComponent(cc.AudioSource);
     }
 
     start () {
@@ -30,11 +32,11 @@ export default class NewClass extends cc.Component {
     onBeginContact(contact,self,other){
         if(self.tag === 51){
             let spawn = this.muschroomSpawn();
-            //this.mushroom.runAction(this.muschroomSpawn());
             let callback = cc.callFunc(this.mushroomSetUp,this)
             let sequence = cc.sequence(spawn,callback)
-            //this.mushroomMovement();
             this.mushroom.runAction(sequence);
+            this.mushroomSound.play();
+
             this.node.runAction(this.questionBoxMovement());
             this.questionBoxAnimation.play("emptyQuestionBox");
             this.removeCollider();
@@ -42,8 +44,8 @@ export default class NewClass extends cc.Component {
     }
 
     update (dt) {
-        if(this.isSpawned){
-            this.mushroomMovement(dt);
+        if(this.isSpawned && this.mushroom){
+            this.mushroomMovement(dt); // produce error need fix
         }
     }
 
