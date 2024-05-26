@@ -21,7 +21,8 @@ export default class Player extends cc.Component {
     private rigidBody: cc.RigidBody = null;
 
     private animation: cc.Animation =null;
-    private isBig =false;
+    private isBig: boolean =false;
+    private turnBig: boolean = false;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -39,6 +40,7 @@ export default class Player extends cc.Component {
 
     update (dt) {
         this.playerMovement(dt);
+        this.checkSize();
     }
 
     onBeginContact(contact, self, other){
@@ -52,7 +54,7 @@ export default class Player extends cc.Component {
         }
         if(other.node.name === "mushroom"){
             this.mushroom.destroy();
-            
+            this.turnBig = true;
         }
 
     }
@@ -91,30 +93,52 @@ export default class Player extends cc.Component {
         if(this.Up && this.onGround){
             this.onGround = false;
             velocity.y = 150 //jump
-            this.animation.play("jump");
+            if(!this.isBig){
+                this.animation.play("jump");
+            }
+            else{
+                this.animation.play("bigJump");
+            }
+
         }
 
         if(this.Left){
             velocity.x = -100;
             this.node.scaleX = -1;
             //always run the jump animation if not on the gournd
-            if (!this.animation.getAnimationState("run").isPlaying && this.onGround) {
-                this.animation.play("run");
+            if (!this.animation.getAnimationState("run").isPlaying && !this.animation.getAnimationState("bigRun").isPlaying && this.onGround) {
+                if(!this.isBig){
+                    this.animation.play("run");
+                }
+                else{
+                    this.animation.play("bigRun");
+                }
             }
         }
         else if(this.Right){
             velocity.x = 100;
             this.node.scaleX = 1;
-            if (!this.animation.getAnimationState("run").isPlaying && this.onGround) {
-                this.animation.play("run");
+            if (!this.animation.getAnimationState("run").isPlaying && !this.animation.getAnimationState("bigRun").isPlaying && this.onGround) {
+                if(!this.isBig){
+                    this.animation.play("run");
+                }
+                else{
+                    console.log("big");
+                    this.animation.play("bigRun");
+                }
             }
         }
         else{
             velocity.x = 0;
             //prevent from immediately stopping the jump motion when neither left nor right is pressed 
-            if (!this.animation.getAnimationState("jump").isPlaying) {
+            if (!this.animation.getAnimationState("jump").isPlaying && !this.animation.getAnimationState("bigJump").isPlaying) {
                 if(this.onGround){
-                    this.animation.play("idle");
+                    if(!this.isBig){
+                        this.animation.play("idle");
+                    }
+                    else{
+                        this.animation.play("bigIdle");
+                    }
                 }
                 //this.animation.stop();
             }
@@ -123,5 +147,14 @@ export default class Player extends cc.Component {
         this.rigidBody.linearVelocity = velocity;
         //can't use node.x bc by pass physics manager
         //can't directly set linearVelocity.x or y becuase it is a getter
+    }
+
+    private checkSize(){
+        if(this.turnBig === true){
+            let physicsBoxCollider = this.getComponent(cc.PhysicsBoxCollider);
+            physicsBoxCollider.size = new cc.Size(16,27);
+            physicsBoxCollider.apply();
+            this.isBig=true;
+        }
     }
 }
