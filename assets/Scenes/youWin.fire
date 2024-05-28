@@ -58,7 +58,7 @@
     "_groupIndex": 0,
     "groupIndex": 0,
     "autoReleaseAssets": false,
-    "_id": "7ejk+TY8JF8JdDYJ4Fz8Wt"
+    "_id": "65a2a831-a1e0-4ffe-b0a0-852b42457e56"
   },
   {
     "__type__": "cc.Node",
@@ -348,18 +348,18 @@
       }
     ],
     "_prefab": null,
-    "_opacity": 221.085,
+    "_opacity": 221,
     "_color": {
       "__type__": "cc.Color",
-      "r": 60,
-      "g": 44,
-      "b": 182,
+      "r": 229,
+      "g": 238,
+      "b": 11,
       "a": 255
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 169.96,
-      "height": 50.4
+      "width": 65,
+      "height": 40
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -370,15 +370,15 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        0,
-        70,
+        -3.325,
+        81.636,
         0,
         0,
         0,
         0,
         1,
-        2,
-        2,
+        8,
+        8,
         1
       ]
     },
@@ -410,13 +410,15 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "You Win!",
-    "_N$string": "You Win!",
+    "_string": "YOU WIN!",
+    "_N$string": "YOU WIN!",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
-    "_N$file": null,
-    "_isSystemFontUsed": true,
+    "_N$file": {
+      "__uuid__": "778ba976-de37-43bb-951a-960b9d4e8460"
+    },
+    "_isSystemFontUsed": false,
     "_spacingX": 0,
     "_batchAsBitmap": false,
     "_styleFlags": 1,

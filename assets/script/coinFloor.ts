@@ -12,6 +12,8 @@ export default class NewClass extends cc.Component {
 
     private coinAnimation: cc.Animation = null;
     private coinSound:cc.AudioSource = null;
+    private coinAnimationState: cc.AnimationState = null;
+    private doOnce: number = 0;
     
     // LIFE-CYCLE CALLBACKS:
 
@@ -25,17 +27,22 @@ export default class NewClass extends cc.Component {
     }
 
     onBeginContact(contact,self,other){
-        if(other.node.name === "Mario"){
-            this.coinSound.play();
-            this.node.getComponent(cc.Animation).play("collectCoin");
-            //call backfunction (no parenthses) need bind else "this" will refers to the window
-            this.coinAnimation.on("finished",this.removeSprite.bind(this));
+        this.doOnce+=1;
+        if(this.doOnce == 1){
+            if(other.node.name === "Mario"){
+                this.coinSound.play();
+                this.coinAnimation.play("collectCoin");
+                this.coinAnimationState = this.coinAnimation.getAnimationState("collectCoin");
+                //call backfunction (no parenthses) need bind else "this" will refers to the window
+                this.coinAnimation.on("finished",this.removeSprite.bind(this));
+            }
         }
+        
     }
     //status will be auto pass in by call back
     private removeSprite(status){
         if(status==="finished"){
-            this.scheduleOnce(()=>{this.node.destroy()},this.coinSound.clip.duration)
+            this.scheduleOnce(()=>{this.node.destroy()},0.2)
         }
     }
 

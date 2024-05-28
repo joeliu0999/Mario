@@ -13,12 +13,14 @@ export default class NewClass extends cc.Component {
     @property(cc.Node)
     character: cc.Node = null;
 
+    private originalYPosition:number =0;
     private diff:number = 0;
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         this.diff = this.node.x-this.character.x;
+        this.originalYPosition = this.node.y;
     }
 
     start () {
@@ -27,5 +29,11 @@ export default class NewClass extends cc.Component {
 
     update (dt) {
         this.node.x = this.character.x+this.diff;
+        console.log(this.character.position);
+
+
+        if(this.character.y>-75){
+            this.node.y = this.originalYPosition+this.character.y+75;
+        }
     }
 }

@@ -44,7 +44,7 @@ export default class NewClass extends cc.Component {
     }
 
     update (dt) {
-        if(this.isSpawned && this.mushroom){
+        if(this.isSpawned && this.mushroom.name != ''){
             this.mushroomMovement(dt); // produce error need fix
         }
     }

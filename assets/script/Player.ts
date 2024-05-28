@@ -22,7 +22,8 @@ export default class Player extends cc.Component {
 
     private jumpAudio: cc.AudioSource = null;
     private deathAudio: cc.AudioSource = null;
-    private poswerDownAudio: cc.AudioSource = null;
+    private powerDownAudio: cc.AudioSource = null;
+    private powerUpAudio: cc.AudioSource = null;
     
     
 
@@ -33,6 +34,7 @@ export default class Player extends cc.Component {
     private hitWall: boolean = false;
     private rebornTime: number = 3;
     private life: number = 3;
+    private tunnelOnce: boolean = true;
     
 
     // LIFE-CYCLE CALLBACKS:
@@ -46,12 +48,12 @@ export default class Player extends cc.Component {
         let audio = this.getComponents(cc.AudioSource);
         this.jumpAudio = audio[0];
         this.deathAudio = audio [1];
-        this.poswerDownAudio = audio [2];
+        this.powerDownAudio = audio [2];
+        this.powerUpAudio = audio [3];
         //this.turnBig=true;
     }
 
     start () {
-        
     }
 
     update (dt) {
@@ -61,15 +63,37 @@ export default class Player extends cc.Component {
     }
 
     onBeginContact(contact, self, other){
-        this.hitWall = true;
-        if(this.onGround){
-            this.hitWall = false;
-        }
-        if(other.node.name === "ground" || other.node.name === "sTube" || other.node.name === "tube" || other.node.name === "brick"){
-            
-            if(self.tag === 1){
-                this.onGround = true;
+        //this.hitWall = true;
+        console.log(other.node.name);
+        console.log(this.node.position)
+
+        if(other.tag == 200){
+            console.log("hit tunnel")
+            if(cc.director.getScene().name === "hidden" && this.tunnelOnce){
+                
+                var callFuncAction = cc.callFunc(()=>{cc.director.loadScene("first");}, this);
+                this.node.runAction(cc.sequence(cc.moveTo(0,cc.v2(139,-119)),cc.moveBy(2,0,-8),callFuncAction));
             }
+            else if(cc.director.getScene().name === "first" && this.tunnelOnce){
+                this.tunnelOnce = false;
+                var callFuncAction = cc.callFunc(()=>{cc.director.loadScene("hidden");}, this);
+                this.node.runAction(cc.sequence(cc.moveTo(0,cc.v2(670,47)),cc.moveBy(2,0,-15),callFuncAction));
+            }
+        }
+
+        if(self.tag == "1" && this.isBig){
+            console.log("big");
+            console.log(other.node);
+            if(other.node.name != "brickLine"){
+                other.node.destroy();
+            }
+            
+        }
+        if(other.node.name === "ground" || other.node.name === "sTube" || other.node.name === "tube" || 
+        other.node.name === "brick" || other.node.name === "brickLine" || other.node.name === "blueBrick"){
+
+            this.onGround = true;
+
         }
         if(other.node.name === "ivy"){
             this.onGround = true;
@@ -79,7 +103,7 @@ export default class Player extends cc.Component {
             if(this.isBig){
                 this.reborn();
                 this.scheduleOnce(()=>{this.turnSmall = true},this.rebornTime);
-                this.poswerDownAudio.play();
+                this.powerDownAudio.play();
             }
             else{
                 this.isDead = true;
@@ -88,6 +112,7 @@ export default class Player extends cc.Component {
         }
         if(other.node.name === "mushroom"){
             this.mushroom.destroy();
+            this.powerUpAudio.play()
             this.turnBig = true;
         }
         if(other.node.name === "flag"){
@@ -129,13 +154,13 @@ export default class Player extends cc.Component {
                 cc.director.loadScene("GameOver");
             }
 
-            this.node.position=cc.v3(-400,50,0);
+            this.node.position=cc.v3(-400,-150,0);
             this.isDead = false;
             this.deathAudio.play();
         }
         if(this.Up && this.onGround){
             this.onGround = false;
-            velocity.y = 150 //jump
+            velocity.y = 210 //jump
             if(!this.isBig){
                 this.animation.play("jump");
             }
@@ -147,7 +172,7 @@ export default class Player extends cc.Component {
         }
 
         if(this.Left){
-            velocity.x = -100;
+            velocity.x = -200;
             this.node.scaleX = -1;
             //always run the jump animation if not on the gournd
             if (!this.animation.getAnimationState("run").isPlaying && !this.animation.getAnimationState("bigRun").isPlaying && this.onGround) {
@@ -160,14 +185,13 @@ export default class Player extends cc.Component {
             }
         }
         else if(this.Right){
-            velocity.x = 100;
+            velocity.x = 200;
             this.node.scaleX = 1;
             if (!this.animation.getAnimationState("run").isPlaying && !this.animation.getAnimationState("bigRun").isPlaying && this.onGround) {
                 if(!this.isBig){
                     this.animation.play("run");
                 }
                 else{
-                    console.log("big");
                     this.animation.play("bigRun");
                 }
             }
@@ -184,7 +208,6 @@ export default class Player extends cc.Component {
                         this.animation.play("bigIdle");
                     }
                 }
-                //this.animation.stop();
             }
         }
 
@@ -199,7 +222,6 @@ export default class Player extends cc.Component {
 
     private checkSizeBig(){
         if(this.turnBig === true){
-            console.log("test");
             let physicsBoxCollider = this.node.getComponents(cc.PhysicsBoxCollider);
             for(let i=0;i<physicsBoxCollider.length;i++){
                 if(physicsBoxCollider[i].tag === 10){
@@ -208,8 +230,8 @@ export default class Player extends cc.Component {
                 }
                 else{
                     physicsBoxCollider[i].tag = 1;
-                    physicsBoxCollider[i].size = new cc.Size(16,21);
-                    physicsBoxCollider[i].offset = cc.v2(0,-3);
+                    physicsBoxCollider[i].size = new cc.Size(3,21);
+                    physicsBoxCollider[i].offset = cc.v2(0,3); //head wall break
                     physicsBoxCollider[i].apply();
                 }
             }
@@ -226,7 +248,7 @@ export default class Player extends cc.Component {
                     physicsBoxCollider[i].apply();
                 }
                 else{
-                    physicsBoxCollider[i].tag = 1;
+                    physicsBoxCollider[i].tag = 100; //og:1, disable for now
                     physicsBoxCollider[i].size = new cc.Size(1,10);
                     physicsBoxCollider[i].offset = cc.v2(0,-3);
                     physicsBoxCollider[i].apply();
@@ -240,5 +262,12 @@ export default class Player extends cc.Component {
     private reborn(){
         let sequence = cc.sequence (cc.hide(),cc.delayTime(0.1),cc.show())
             this.schedule(()=>{this.node.runAction(sequence)},0.2,10);
+    }
+
+    private removeColliderAll(other){
+        let colliders = other.node.getComponents(cc.PhysicsBoxCollider);
+        for(let i=0; i<colliders.length; i++){
+            if(colliders[i].tag == 200) colliders[i].destroy();
+        }
     }
 }
