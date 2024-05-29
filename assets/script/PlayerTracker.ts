@@ -29,8 +29,6 @@ export default class NewClass extends cc.Component {
 
     update (dt) {
         this.node.x = this.character.x+this.diff;
-        console.log(this.character.position);
-
 
         if(this.character.y>-75){
             this.node.y = this.originalYPosition+this.character.y+75;

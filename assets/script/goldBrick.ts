@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import GlobalData from "./GlobalData";
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -41,6 +42,7 @@ export default class NewClass extends cc.Component {
             this.goldBlockAnimation.play("turnBrick");
             this.audioSource.play();
             this.removeCollider();
+            GlobalData.score+=200;
         }
 
 

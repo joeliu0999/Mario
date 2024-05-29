@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import GlobalData from "./GlobalData";
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -35,6 +36,7 @@ export default class NewClass extends cc.Component {
                 this.coinAnimationState = this.coinAnimation.getAnimationState("collectCoin");
                 //call backfunction (no parenthses) need bind else "this" will refers to the window
                 this.coinAnimation.on("finished",this.removeSprite.bind(this));
+                GlobalData.score+=200;
             }
         }
         

@@ -4,7 +4,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
+import GlobalData from "./GlobalData";
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -14,7 +14,8 @@ export default class NewClass extends cc.Component {
     mario: cc.Node = null;
 
     private animation: cc.Animation = null;
-    private stompAudio : cc.AudioSource = null;
+    private stompAudio: cc.AudioSource = null;
+    private Once: boolean = true;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -33,10 +34,12 @@ export default class NewClass extends cc.Component {
     }
 
     onBeginContact(contact, self, other){
-        if(self.tag === 6){
+        if(self.tag === 6 && this.Once){
+            this.mario.getComponent(cc.RigidBody).linearVelocity= cc.v2(0,100);
             this.animation.play("GoombaDead");
             this.animation.on('finished',()=>this.node.destroy(),this);
             this.stompAudio.play();
+            GlobalData.score +=50; //mario has 2 collider 100 score total
         }
     }
 

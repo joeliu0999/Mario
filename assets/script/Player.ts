@@ -5,6 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import GlobalData from "./GlobalData";
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -33,7 +35,6 @@ export default class Player extends cc.Component {
     private turnSmall: boolean =false;
     private hitWall: boolean = false;
     private rebornTime: number = 3;
-    private life: number = 3;
     private tunnelOnce: boolean = true;
     
 
@@ -50,10 +51,10 @@ export default class Player extends cc.Component {
         this.deathAudio = audio [1];
         this.powerDownAudio = audio [2];
         this.powerUpAudio = audio [3];
-        //this.turnBig=true;
     }
 
     start () {
+        this.reset();
     }
 
     update (dt) {
@@ -63,14 +64,10 @@ export default class Player extends cc.Component {
     }
 
     onBeginContact(contact, self, other){
-        //this.hitWall = true;
-        console.log(other.node.name);
-        console.log(this.node.position)
-
+        // enter and leave hiddren world
         if(other.tag == 200){
-            console.log("hit tunnel")
             if(cc.director.getScene().name === "hidden" && this.tunnelOnce){
-                
+                this.tunnelOnce = false;
                 var callFuncAction = cc.callFunc(()=>{cc.director.loadScene("first");}, this);
                 this.node.runAction(cc.sequence(cc.moveTo(0,cc.v2(139,-119)),cc.moveBy(2,0,-8),callFuncAction));
             }
@@ -82,10 +79,9 @@ export default class Player extends cc.Component {
         }
 
         if(self.tag == "1" && this.isBig){
-            console.log("big");
-            console.log(other.node);
             if(other.node.name != "brickLine"){
                 other.node.destroy();
+                GlobalData.score += 50;
             }
             
         }
@@ -118,7 +114,6 @@ export default class Player extends cc.Component {
         if(other.node.name === "flag"){
             cc.director.loadScene("youWin");
         }
-
     }
 
     private onKeyDown(event){
@@ -149,12 +144,19 @@ export default class Player extends cc.Component {
         let velocity = this.rigidBody.linearVelocity;
 
         if(this.isDead){
-            this.life-=1;
-            if(this.life==0){
+            GlobalData.life-=1;
+            if(GlobalData.life==0){
+                this.reset();
                 cc.director.loadScene("GameOver");
             }
 
-            this.node.position=cc.v3(-400,-150,0);
+            if(cc.director.getScene().name=="hidden"){
+                this.node.position=cc.v3(-119,0,0);
+            }
+            else{
+                this.node.position=cc.v3(-400,-150,0);
+            }
+
             this.isDead = false;
             this.deathAudio.play();
         }
@@ -264,10 +266,9 @@ export default class Player extends cc.Component {
             this.schedule(()=>{this.node.runAction(sequence)},0.2,10);
     }
 
-    private removeColliderAll(other){
-        let colliders = other.node.getComponents(cc.PhysicsBoxCollider);
-        for(let i=0; i<colliders.length; i++){
-            if(colliders[i].tag == 200) colliders[i].destroy();
-        }
+    private reset(){
+        GlobalData.score = 0;
+        GlobalData.life = 3;
+        GlobalData.time = 0;
     }
 }
