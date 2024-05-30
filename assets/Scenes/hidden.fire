@@ -5756,12 +5756,12 @@
     "body": null,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": 33,
+      "x": -73,
       "y": -10
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 337,
+      "width": 549,
       "height": 25
     },
     "_id": "129KbwzJxHDZXmI7uhfnNe"

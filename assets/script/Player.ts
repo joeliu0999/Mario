@@ -54,7 +54,9 @@ export default class Player extends cc.Component {
     }
 
     start () {
-        this.reset();
+        if(cc.director.getScene().name === "first"){
+            this.reset();
+        }
     }
 
     update (dt) {
