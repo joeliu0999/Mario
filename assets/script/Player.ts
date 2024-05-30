@@ -86,9 +86,6 @@ export default class Player extends cc.Component {
                 GlobalData.score += 50;
             }
         }
-        if(self.tag == 100){
-            this.hitWall = true;
-        }
         if(other.node.name === "ground" || other.node.name === "sTube" || other.node.name === "tube" || 
         other.node.name === "brick" || other.node.name === "brickLine" || other.node.name === "blueBrick"){
 
@@ -177,7 +174,7 @@ export default class Player extends cc.Component {
 
         }
 
-        if(this.Left){
+        if(this.Left &&!this.hitWall){
             velocity.x = -200;
             this.node.scaleX = -1;
             //always run the jump animation if not on the gournd
@@ -190,7 +187,7 @@ export default class Player extends cc.Component {
                 }
             }
         }
-        else if(this.Right){
+        else if(this.Right  &&!this.hitWall){
             velocity.x = 200;
             this.node.scaleX = 1;
             if (!this.animation.getAnimationState("run").isPlaying && !this.animation.getAnimationState("bigRun").isPlaying && this.onGround) {
