@@ -51,3 +51,9 @@ Thumbs.db
 #//////////////////////////
 
 .vscode/
+
+
+#API
+
+assets/script/firebase.js
+assets/script/firebase.js.meta

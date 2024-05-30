@@ -85,7 +85,9 @@ export default class Player extends cc.Component {
                 other.node.destroy();
                 GlobalData.score += 50;
             }
-            
+        }
+        if(self.tag == 100){
+            this.hitWall = true;
         }
         if(other.node.name === "ground" || other.node.name === "sTube" || other.node.name === "tube" || 
         other.node.name === "brick" || other.node.name === "brickLine" || other.node.name === "blueBrick"){
