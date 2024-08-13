@@ -16,33 +16,28 @@ export default class NewClass extends cc.Component {
     passwordBox: cc.EditBox = null;
 
     @property(cc.Node)
-    signUpButton: cc.Node = null;
+    loginButton: cc.Node = null;
 
     @property(cc.Node)
     label: cc.Node = null;
 
-    @property
-    text: string = 'hello';
-
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.signUpButton.on("click",()=>{
-            console.log("add data to fb");
+        this.loginButton.on("click",()=>{
 
             var usersRef = firebase.database().ref('Users');
             const query = usersRef.orderByChild('username').equalTo(this.usernameBox.string);
             query.once('value',(snapshot)=>{
                 if(snapshot.exists()){
-                    this.label.getComponent(cc.Label).string = "username already exist";
-                    return;
+                    //turn it into array to extract the ID
+                    let uniqueID = Object.keys(snapshot.val())[0];
+                    if(this.passwordBox.string == snapshot.val()[uniqueID].password){
+                        cc.director.loadScene('first');
+                        return;
+                    }
                 }
-                var userData = {
-                    username: this.usernameBox.string,
-                    password: this.passwordBox.string
-                };
-                usersRef.push(userData);
-                cc.director.loadScene('first');
+                this.label.getComponent(cc.Label).string = "incorrect password or username";
             })
         })
 
