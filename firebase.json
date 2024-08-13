@@ -1,22 +1,10 @@
 {
-  "hosting": [
-    {
-      "target": "main-site",
-      "public": "build/web-desktop",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ]
-    },
-    {
-      "target": "new-scoreboard",
-      "public": "build/web-desktop",
-      "ignore": [
-        "firebase.json",
-        "**/.*",
-        "**/node_modules/**"
-      ]
-    }
-  ]
+  "hosting": {
+    "public": "build/web-desktop",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
 }
