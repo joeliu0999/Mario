@@ -1,7 +1,7 @@
 {
   "title": "Mario",
   "packageName": "org.cocos2d.demo",
-  "startScene": "20c58f34-bc50-4a3e-82ed-9454a400a1ac",
+  "startScene": "973da99f-6b87-4849-8305-2455c7c65f35",
   "excludeScenes": [],
   "orientation": {
     "landscapeRight": true,
