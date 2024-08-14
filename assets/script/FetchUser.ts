@@ -5,24 +5,16 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import GlobalData from "./GlobalData";
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class NewClass extends cc.Component {
 
-    @property(cc.Node)
-    startButton: cc.Node = null;
-
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.startButton.on("click",()=>{cc.director.loadScene("first")},this); 
+        this.node.getComponent(cc.Label).string = GlobalData.usernameG;
     }
-
-    start () {
-
-    }
-
-    // update (dt) {}
 }

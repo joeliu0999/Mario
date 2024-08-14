@@ -5,6 +5,7 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import GlobalData from "./GlobalData";
 const {ccclass, property} = cc._decorator;
 declare const firebase:any;
 @ccclass
@@ -21,8 +22,6 @@ export default class NewClass extends cc.Component {
     @property(cc.Node)
     label: cc.Node = null;
 
-    @property
-    text: string = 'hello';
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -42,15 +41,10 @@ export default class NewClass extends cc.Component {
                     password: this.passwordBox.string
                 };
                 usersRef.push(userData);
+                GlobalData.usernameG = this.usernameBox.string;
                 cc.director.loadScene('first');
             })
         })
 
     }
-
-    start () {
-
-    }
-
-    // update (dt) {}
 }

@@ -5,6 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import GlobalData from "./GlobalData";
+
 const {ccclass, property} = cc._decorator;
 declare const firebase:any;
 @ccclass
@@ -33,6 +35,7 @@ export default class NewClass extends cc.Component {
                     //turn it into array to extract the ID
                     let uniqueID = Object.keys(snapshot.val())[0];
                     if(this.passwordBox.string == snapshot.val()[uniqueID].password){
+                        GlobalData.usernameG = this.usernameBox.string;
                         cc.director.loadScene('first');
                         return;
                     }
@@ -42,10 +45,4 @@ export default class NewClass extends cc.Component {
         })
 
     }
-
-    start () {
-
-    }
-
-    // update (dt) {}
 }

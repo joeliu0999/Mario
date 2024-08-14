@@ -10,4 +10,5 @@ export default class GlobalData {
     public static score: number = 0;
     public static life: number = 3;
     public static time: number = 0;
+    public static usernameG: string = "";
 }
